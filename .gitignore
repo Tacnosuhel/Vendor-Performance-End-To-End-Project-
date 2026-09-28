@@ -1,0 +1,32 @@
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python Cache & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook Checkpoints
+.ipynb_checkpoints/
+
+# Data Files & Datasets (Prevent uploading heavy CSVs)
+data/
+*.csv
+
+# SQLite Database Files
+*.db
+*.sqlite
+*.sqlite3
+
+# Log Files
+logs/
+*.log
+
+# OS & Editor generated files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
