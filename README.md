@@ -1,32 +1,45 @@
--- Daily Trend of Total Orders
-SELECT DATENAME(DW, order_date) AS Order_Day, 
-       COUNT(DISTINCT order_id) AS Total_Orders
-FROM pizza_sales
-GROUP BY DATENAME(DW, order_date);
+# Retail Vendor Performance & Procurement Analytics
 
--- Hourly Trend of Total Orders
-SELECT DATEPART(HOUR, order_time) AS Order_Hour, 
-       COUNT(DISTINCT order_id) AS Total_Orders
-FROM pizza_sales
-GROUP BY DATEPART(HOUR, order_time)
-ORDER BY Order_Hour;
+An end-to-end data analytics project evaluating vendor profitability, procurement efficiency, and inventory turnover across multi-table retail datasets. This repository demonstrates automated ETL scripting in Python, relational database modeling in SQLite, exploratory data analysis, and an executive business intelligence dashboard in Power BI.
 
--- Percentage of Sales by Pizza Category
-SELECT pizza_category, 
-       CAST(SUM(total_price) AS DECIMAL(10,2)) AS Total_Revenue,
-       CAST(SUM(total_price) * 100 / (SELECT SUM(total_price) FROM pizza_sales) AS DECIMAL(10,2)) AS Sales_Percentage
-FROM pizza_sales
-GROUP BY pizza_category
-ORDER BY Sales_Percentage DESC;
+---
 
--- Top 5 Best Sellers by Total Pizzas Sold
-SELECT TOP 5 pizza_name, SUM(quantity) AS Total_Pizzas_Sold
-FROM pizza_sales
-GROUP BY pizza_name
-ORDER BY Total_Pizzas_Sold DESC;
+## 📌 Project Overview
 
--- Bottom 5 Worst Sellers by Total Pizzas Sold
-SELECT TOP 5 pizza_name, SUM(quantity) AS Total_Pizzas_Sold
-FROM pizza_sales
-GROUP BY pizza_name
-ORDER BY Total_Pizzas_Sold ASC;
+Retail and wholesale businesses frequently face hidden margin losses due to supplier dependency, high holding costs from slow-moving stock, and inefficient pricing tiers. 
+
+This project establishes a complete data pipeline to solve these challenges:
+1. **Automated ETL & Database Ingestion:** Python scripts with built-in logging and execution benchmarking to ingest multi-table CSV datasets (over 2 GB) into a structured SQLite database.
+2. **SQL Query Optimization & Data Aggregation:** Addressing memory bottlenecks caused by large transactional datasets (~10M+ sales records) using modular SQL aggregations and CTEs to build a clean `vendor_sales_summary` table.
+3. **Exploratory Data Analysis (EDA):** Preprocessing, handling missing values/white spaces, outlier diagnosis, feature engineering (Gross Profit, Profit Margin, Stock Turnover), and correlation analysis.
+4. **Interactive Power BI Dashboard:** Translating derived metrics into visual business intelligence using custom DAX measures, summary tables, KPI cards, and cross-filtering visuals.
+
+---
+
+## 🛠️ Tech Stack & Skills
+
+- **Languages:** Python (Pandas, NumPy, Matplotlib, Seaborn)
+- **Database:** SQLite, SQLAlchemy
+- **Data Engineering / Pipeline:** Python Scripting, File I/O, Automated Logging (`logging` module), Query Optimization
+- **Business Intelligence:** Microsoft Power BI, DAX (Data Analysis Expressions), Power Query
+- **Analytical Concepts:** Inventory Turnover, Procurement Concentration (Pareto Analysis), Unit Cost Elasticity, Gross Margin Optimization
+
+---
+
+## 🏗️ Architecture & Pipeline Flow
+
+```text
+Raw CSV Files (2GB+)
+  ├── Begin/End Inventory
+  ├── Purchases & Purchase Prices
+  ├── Vendor Invoices
+  └── Sales (10M+ rows)
+         │
+         ▼ (ingestion_db.py - Python & SQLAlchemy with Logging)
+SQLite Database (`inventory.db`)
+         │
+         ▼ (get_vendor_summary.py - Optimized Multi-Table SQL Joins & Cleaning)
+Pre-Aggregated Analytical Table (`vendor_sales_summary`)
+         │
+         ├───► Python Jupyter Notebook (EDA, Correlation, Margin & Turnover Analysis)
+         └───► Microsoft Power BI (.pbix) (DAX Modeling & Interactive Dashboard)
